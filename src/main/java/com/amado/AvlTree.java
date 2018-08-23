@@ -13,7 +13,7 @@ public class AvlTree {
         return root;
     }
 
-    public void insert(final Integer number) {
+    public Node insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
         final Node node = new Node(number);
@@ -21,21 +21,21 @@ public class AvlTree {
             root = node;
         }
 
-        insert(root, node);
+        return insert(root, node);
     }
 
-    private void insert(Node parent, final Node child) {
+    private Node insert(Node parent, final Node child) {
         final Integer parentValue = parent.getValue();
         final Integer childValue = child.getValue();
         if (childValue == parentValue) {
-            return;
+            return parent;
         }
 
         if (childValue < parentValue) {
             final Node left = parent.getLeft();
             if (null == left) {
                 parent.setLeft(child);
-                return;
+                return parent;
             }
 
             insert(left, child);
@@ -44,10 +44,10 @@ public class AvlTree {
         final Node right = parent.getRight();
         if (null == right) {
             parent.setRight(child);
-            return;
+            return parent;
         }
 
-        insert(right, child);
+        return insert(right, child);
     }
 
     public Node find(final Node node, final Integer number) {
@@ -65,5 +65,20 @@ public class AvlTree {
         }
 
         return find(node.getRight(), number);
+    }
+
+    public Integer getHeight(final Node node) {
+        return getHeight(node, 0);
+    }
+
+    private Integer getHeight(final Node node, final Integer height) {
+        if (null == node) {
+            return height;
+        }
+
+        final Integer leftHeight = getHeight(node.getLeft(), height+1);
+        final Integer rightHeight = getHeight(node.getRight(), height+1);
+
+        return leftHeight > rightHeight ? leftHeight : rightHeight;
     }
 }

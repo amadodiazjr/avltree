@@ -2,6 +2,7 @@ package com.amado;
 
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -46,7 +47,7 @@ public class AvlTreeTest {
     }
 
     @Test
-    public void getRootShallReturnRootWhenInsertIsCalled() {
+    public void getRootShallReturnRootWhenInsertIsSuccessful() {
         final AvlTree tree = new AvlTree();
         final Integer number = 10;
 
@@ -88,6 +89,95 @@ public class AvlTreeTest {
 
         // ~then
         assertThat(node, notNullValue());
+    }
+
+    @Test
+    public void getHeightShallReturnOneOnRootNodeWithZeroChildren() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+        tree.insert(number);
+        final Node root = tree.getRoot();
+
+        // ~given
+        assertThat(root, notNullValue());
+
+        // ~when
+        final Integer height = tree.getHeight(root);
+
+        // ~then
+        assertThat(height, equalTo(1));
+    }
+
+    @Test
+    public void getHeightShallReturnZeroWhenNodeHasNoLeftChild() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+        tree.insert(number);
+        final Node root = tree.getRoot();
+        final Node left = root.getLeft();
+
+        // ~given
+        assertThat(left, nullValue());
+
+        // ~when
+        final Integer height = tree.getHeight(left);
+
+        // ~then
+        assertThat(height, equalTo(0));
+    }
+
+    @Test
+    public void getHeightShallReturnOneWhenNodeHasOneLeftChild() {
+        final AvlTree tree = new AvlTree();
+        tree.insert(10);
+        tree.insert(5);
+        final Node root = tree.getRoot();
+        final Node left = root.getLeft();
+
+        // ~given
+        assertThat(left, notNullValue());
+
+        // ~when
+        final Integer height = tree.getHeight(left);
+
+        // ~then
+        assertThat(height, equalTo(1));
+    }
+
+    @Test
+    public void getHeightShallReturnZeroWhenNodeHasNoRightChild() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+        tree.insert(number);
+        final Node root = tree.getRoot();
+        final Node right = root.getRight();
+
+        // ~given
+        assertThat(right, nullValue());
+
+        // ~when
+        final Integer height = tree.getHeight(right);
+
+        // ~then
+        assertThat(height, equalTo(0));
+    }
+
+    @Test
+    public void getHeightShallReturnOneWhenNodeHasOneRightChild() {
+        final AvlTree tree = new AvlTree();
+        tree.insert(10);
+        tree.insert(20);
+        final Node root = tree.getRoot();
+        final Node right = root.getRight();
+
+        // ~given
+        assertThat(right, notNullValue());
+
+        // ~when
+        final Integer height = tree.getHeight(right);
+
+        // ~then
+        assertThat(height, equalTo(1));
     }
 
 }
