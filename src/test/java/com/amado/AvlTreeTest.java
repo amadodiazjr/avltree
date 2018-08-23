@@ -60,5 +60,34 @@ public class AvlTreeTest {
         assertThat(root, notNullValue());
     }
 
+    @Test
+    public void findShallReturnNullIfRootDoesNotExist() {
+
+        // ~given
+        final AvlTree tree = new AvlTree();
+
+        // ~when
+        final Node node = tree.find(tree.getRoot(), 10);
+
+        // ~then
+        assertThat(node, nullValue());
+    }
+
+    @Test
+    public void findShallReturnNodeIfRootDoesExist() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+        tree.insert(number);
+        final Node root = tree.getRoot();
+
+        // ~given
+        assertThat(root, notNullValue());
+
+        // ~when
+        final Node node = tree.find(root, 10);
+
+        // ~then
+        assertThat(node, notNullValue());
+    }
 
 }

@@ -3,30 +3,28 @@ package com.amado;
 import org.apache.commons.lang3.Validate;
 
 public class AvlTree {
-
     private Node root;
 
     public AvlTree() {
         root = null;
     }
 
+    public Node getRoot() {
+        return root;
+    }
+
     public void insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
+        final Node node = new Node(number);
         if (null == root) {
-            root = new Node(number);
-            return;
+            root = node;
         }
 
-        insertNode(root, new Node(number));
+        insert(root, node);
     }
 
-    private void insertNode(Node parent, final Node child) {
-        if (null == parent) {
-            parent = child;
-            return;
-        }
-
+    private void insert(Node parent, final Node child) {
         final Integer parentValue = parent.getValue();
         final Integer childValue = child.getValue();
         if (childValue == parentValue) {
@@ -34,14 +32,38 @@ public class AvlTree {
         }
 
         if (childValue < parentValue) {
-            insertNode(parent.getLeft(), child);
+            final Node left = parent.getLeft();
+            if (null == left) {
+                parent.setLeft(child);
+                return;
+            }
+
+            insert(left, child);
         }
 
-        insertNode(parent.getRight(), child);
+        final Node right = parent.getRight();
+        if (null == right) {
+            parent.setRight(child);
+            return;
+        }
+
+        insert(right, child);
     }
 
+    public Node find(final Node node, final Integer number) {
+        if (null == node) {
+            return null;
+        }
 
-    public Node getRoot() {
-        return root;
+        final Integer nodeValue = node.getValue();
+        if (number == nodeValue) {
+            return node;
+        }
+
+        if (number < nodeValue) {
+            return find(node.getLeft(), number);
+        }
+
+        return find(node.getRight(), number);
     }
 }
