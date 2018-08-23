@@ -1,25 +1,27 @@
 package com.amado;
 
+import org.apache.commons.lang3.Validate;
+
 public class Node {
-    private Integer value;
+    private final Integer value;
+
     private Node left;
     private Node right;
 
-    public Node() { }
+    public Node(final Integer value) {
+        Validate.notNull(value, "value cannot be null.");
+        this.value = value;
+    }
 
     public Integer getValue() {
         return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
     }
 
     public Node getLeft() {
         return left;
     }
 
-    public void setLeft(Node left) {
+    public void setLeft(final Node left) {
         this.left = left;
     }
 
@@ -27,7 +29,7 @@ public class Node {
         return right;
     }
 
-    public void setRight(Node right) {
+    public void setRight(final Node right) {
         this.right = right;
     }
 }

@@ -7,13 +7,29 @@ import static org.junit.Assert.assertThat;
 
 public class NodeTest {
 
-    @Test
-    public void constructorShallCreateAnInstance() {
-        // ~given
+    @Test(expected = Exception.class)
+    public void constructorShallThrowAnExceptionWhenNumberIsNull() {
         Node node = null;
 
+        // ~given
+        final Integer number = null;
+
         // ~when
-        node = new Node();
+        node = new Node(number);
+
+        // ~then
+        // exception is thrown
+    }
+
+    @Test
+    public void constructorShallCreateAnInstanceWhenNumberIsNotNull() {
+        Node node = null;
+
+        // ~given
+        final Integer number = 10;
+
+        // ~when
+        node = new Node(number);
 
         // ~then
         assertThat(node, notNullValue());

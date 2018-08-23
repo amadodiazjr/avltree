@@ -32,4 +32,31 @@ public class AvlTreeTest {
         assertThat(root, nullValue());
     }
 
+    @Test(expected = Exception.class)
+    public void insertShallThrowAnExceptionWhenNumberIsNull() {
+        // ~given
+        final AvlTree tree = new AvlTree();
+        final Integer number = null;
+
+        // ~when
+        tree.insert(number);
+
+        // ~then
+        // an exception is thrown
+    }
+
+    @Test
+    public void getRootShallReturnRootWhenInsertIsCalled() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+
+        // ~given
+        tree.insert(number);
+
+        // ~when
+        final Node root = tree.getRoot();
+
+        // ~then
+        assertThat(root, notNullValue());
+    }
 }

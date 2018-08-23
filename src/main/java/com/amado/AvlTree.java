@@ -13,7 +13,10 @@ public class AvlTree {
     public void insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
-
+        if (null == root) {
+            root = new Node(number);
+            return;
+        }
     }
 
     public Node getRoot() {
