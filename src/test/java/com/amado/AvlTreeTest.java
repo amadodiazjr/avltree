@@ -201,4 +201,32 @@ public class AvlTreeTest {
         assertThat(root.get("left").get("value").asInt(), equalTo(30));
         assertThat(root.get("right").get("value").asInt(), equalTo(40));
     }
+
+    @Test
+    public void aRecursiveRightImbalancedTreeShallGetBalanced() {
+        final AvlTree tree = new AvlTree();
+
+        // ~given
+        tree.insert(30);
+        tree.insert(40);
+        tree.insert(20);
+        tree.insert(35);
+        tree.insert(50);
+
+        // ~when
+        final Integer height = tree.insert(60);
+
+        // ~then
+        assertThat(height, equalTo(0));
+
+        final JsonNode json = AvlTreeUtil.getInstance().toJson(tree);
+        final JsonNode root = json.get("root");
+        assertThat(root.get("value").asInt(), equalTo(40));
+        assertThat(root.get("left").get("value").asInt(), equalTo(30));
+        assertThat(root.get("left").get("left").get("value").asInt(), equalTo(20));
+        assertThat(root.get("left").get("right").get("value").asInt(), equalTo(35));
+        assertThat(root.get("right").get("value").asInt(), equalTo(50));
+        assertThat(root.get("right").get("right").get("value").asInt(), equalTo(60));
+    }
+
 }
