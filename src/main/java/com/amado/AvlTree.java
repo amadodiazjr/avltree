@@ -13,7 +13,7 @@ public class AvlTree {
         return root;
     }
 
-    public Node insert(final Integer number) {
+    public Integer insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
         final Node node = new Node(number);
@@ -24,61 +24,31 @@ public class AvlTree {
         return insert(root, node);
     }
 
-    private Node insert(Node parent, final Node child) {
+    private Integer insert(final Node parent, final Node child) {
         final Integer parentValue = parent.getValue();
         final Integer childValue = child.getValue();
+
         if (childValue == parentValue) {
-            return parent;
+            return 0;
         }
 
         if (childValue < parentValue) {
             final Node left = parent.getLeft();
             if (null == left) {
                 parent.setLeft(child);
-                return parent;
+                return 1;
             }
 
-            insert(left, child);
+            return parent.getLeftHeight() + insert(parent.getLeft(), child);
         }
 
         final Node right = parent.getRight();
         if (null == right) {
             parent.setRight(child);
-            return parent;
+            return 1;
         }
 
-        return insert(right, child);
+        return parent.getRightHeight() + insert(parent.getRight(), child);
     }
 
-    public Node find(final Node node, final Integer number) {
-        if (null == node) {
-            return null;
-        }
-
-        final Integer nodeValue = node.getValue();
-        if (number == nodeValue) {
-            return node;
-        }
-
-        if (number < nodeValue) {
-            return find(node.getLeft(), number);
-        }
-
-        return find(node.getRight(), number);
-    }
-
-    public Integer getHeight(final Node node) {
-        return getHeight(node, 0);
-    }
-
-    private Integer getHeight(final Node node, final Integer height) {
-        if (null == node) {
-            return height;
-        }
-
-        final Integer leftHeight = getHeight(node.getLeft(), height+1);
-        final Integer rightHeight = getHeight(node.getRight(), height+1);
-
-        return leftHeight > rightHeight ? leftHeight : rightHeight;
-    }
 }
