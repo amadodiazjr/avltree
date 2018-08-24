@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.Validate;
 
+import java.util.Stack;
+
 public class AvlTreeUtil {
     private static class InstanceHolder {
         private static final AvlTreeUtil INSTANCE = new AvlTreeUtil();
@@ -30,6 +32,21 @@ public class AvlTreeUtil {
         return node;
     }
 
+    public JsonNode toJson(final Node subTree) {
+        Validate.notNull(subTree, "subTree cannot be null.");
+
+        JsonNode node = null;
+        try {
+            final String jsonString = new ObjectMapper().writeValueAsString(subTree);
+            node = toJsonNode(jsonString);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        Validate.notNull(node, "json not created.");
+
+        return node;
+    }
+
     public JsonNode toJsonNode(final String jsonText) {
         Validate.notNull(jsonText, "jsonText cannot be null.");
 
@@ -43,4 +60,36 @@ public class AvlTreeUtil {
 
         return node;
     }
+
+    // parent becomes new root.
+    public Node rotateLeft(final Stack<Node> nodes) {
+        Validate.isTrue(nodes.size() == 3, "incorrect number of nodes found.");
+
+        final Node grandParent = nodes.pop();
+        final Node parent = nodes.pop();
+        //final Node child = nodes.pop();
+
+        parent.setParent(grandParent.getParent());
+        parent.setLeft(grandParent);
+        grandParent.setParent(parent);
+        grandParent.setRight(null);
+
+        return parent;
+    }
+
+    public Node rotateRight(final Stack<Node> nodes) {
+        Validate.isTrue(nodes.size() == 3, "incorrect number of nodes found.");
+
+        final Node grandParent = nodes.pop();
+        final Node parent = nodes.pop();
+        //final Node child = nodes.pop();
+
+        parent.setParent(grandParent.getParent());
+        parent.setRight(grandParent);
+        grandParent.setParent(parent);
+        grandParent.setLeft(null);
+
+        return parent;
+    }
+
 }

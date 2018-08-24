@@ -19,118 +19,77 @@ public class AvlTree {
         return null == getRoot();
     }
 
-    public Integer insert(final Integer number) {
+    public void insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
-        final Node node = new Node(number);
         if (null == root) {
-            root = node;
+            root = new Node(number);
         }
 
-        return insert(root, node);
+        final Node node = insert(root, number);
+        //balanceTree(node);
     }
 
-    private Integer insert(final Node parent, final Node child) {
-        final Integer parentValue = parent.getValue();
-        final Integer childValue = child.getValue();
+    private Node insert(final Node current, final Integer number) {
+        final Integer currentValue = current.getValue();
 
-        if (childValue == parentValue) {
-            return 0;
+        // Already exists, don't insert
+        if (number == currentValue) {
+            return current;
         }
 
-        if (childValue < parentValue) {
-            return insertLeft(parent, child);
-        }
+        // Traverse Left
+        if (number < currentValue) {
+            final Node left = current.getLeft();
+            if (null == left) {
+                final Node node = new Node(number);
+                node.setParent(current);
+                current.setLeft(node);
 
-        return insertRight(parent, child);
-    }
-
-    private Integer insertLeft(final Node parent, final Node child) {
-        final Node left = parent.getLeft();
-        if (null == left) {
-            child.setParent(parent);
-            parent.setLeft(child);
-            parent.setLeftHeight(1);
-            return parent.getLeftHeight();
-        }
-
-        final Integer height = insert(left, child);
-        parent.setLeftHeight(parent.getLeftHeight() + height);
-
-        if (!isBalanced(parent)) {
-            final Node grandParent = parent.getParent();  // null
-            Node parentChild = parent.getLeft();    // 20
-
-            if (null != parentChild.getRight()) {
-                final Node parentChildRight = parentChild.getRight();
-                parentChildRight.setParent(parentChild.getParent());
-                parentChildRight.setLeft(parentChild);
-                parentChildRight.setLeftHeight(1);
-                parentChild.setRight(null);
-                parentChild.setRightHeight(0);
-                parentChild.setParent(parentChildRight);
-                parentChild = parentChildRight;
+                return node;
             }
 
-            parentChild.setParent(grandParent);           // 20 > null
-            if (null == grandParent) {
-                root = parentChild;
-            }
-
-            parentChild.setRight(parent);                 //
-            parentChild.setRightHeight(1);
-            parent.setParent(parentChild);
-            parent.setLeft(null);
-            parent.setLeftHeight(0);
+            return insert(left, number);
         }
 
-        return parent.getLeftHeight();
-    }
-
-    private Integer insertRight(final Node parent, final Node child) {
-        final Node right = parent.getRight();
+        // Traverse Right
+        final Node right = current.getRight();
         if (null == right) {
-            child.setParent(parent);
-            parent.setRight(child);
-            parent.setRightHeight(1);
-            return parent.getRightHeight();
+            final Node node = new Node(number);
+            node.setParent(current);
+            current.setRight(node);
+
+            return node;
         }
 
-        final Integer height = insert(right, child);
-        parent.setRightHeight(parent.getRightHeight() + height);
-
-        if (!isBalanced(parent)) {
-            final Node grandParent = parent.getParent();
-            Node parentChild = parent.getRight();
-
-            if (null != parentChild.getLeft()) {
-                final Node parentChildLeft = parentChild.getLeft();
-                parentChildLeft.setParent(parentChild.getParent());
-                parentChildLeft.setRight(parentChild);
-                parentChildLeft.setRightHeight(1);
-                parentChild.setLeft(null);
-                parentChild.setLeftHeight(0);
-                parentChild.setParent(parentChildLeft);
-                parentChild = parentChildLeft;
-            }
-
-            parentChild.setParent(grandParent);
-            if (null == grandParent) {
-                root = parentChild;
-            }
-
-            parentChild.setLeft(parent);
-            parentChild.setLeftHeight(1);
-            parent.setParent(parentChild);
-            parent.setRight(null);
-            parent.setRightHeight(0);
-        }
-
-        return parent.getRightHeight();
+        return insert(current.getRight(), number);
     }
 
+    private Node balanceTree(final Node node) {
+        if (null == node) {
+            return null;
+        }
 
-    private Boolean isBalanced(final Node node) {
-        return Math.abs(node.getLeftHeight() - node.getRightHeight()) <= 1;
+        final Integer leftHeight = getHeight(node, 0);
+        final Integer rightHeight = getHeight(node, 0);
+        
+
+        //if (height <= 1) {
+//            return balanceTree(node.getParent());
+  //      }
+
+        return node;
+    }
+
+    private Integer getHeight(final Node node, final Integer height) {
+        Integer leftHeight = 0;
+        Integer rightHeight = 0;
+
+        if (node != null) {
+            leftHeight = getHeight(node.getLeft(), height + 1);
+            rightHeight = getHeight(node.getRight(), height + 1);
+        }
+
+        return leftHeight > rightHeight ? leftHeight : rightHeight;
     }
 }

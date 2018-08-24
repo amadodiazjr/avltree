@@ -3,6 +3,9 @@ package com.amado;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Test;
 
+import java.util.Stack;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -39,4 +42,63 @@ public class AvlTreeUtilTest {
         assertThat(root, notNullValue());
         assertThat(root.get("value"), notNullValue());
     }
+
+    @Test
+    public void rotateLeftShallMakeParentTheRoot() {
+        final Node grandParent = new Node(10);
+        final Node parent = new Node(20);
+        final Node child = new Node(30);
+        parent.setRight(child);
+        grandParent.setRight(parent);
+
+        final Stack<Node> nodes = new Stack<>();
+        nodes.push(child);
+        nodes.push(parent);
+        nodes.push(grandParent);
+
+        // ~given
+        final JsonNode before = AvlTreeUtil.getInstance().toJson(nodes.lastElement());
+        assertThat(before.get("value").asInt(), equalTo(10));
+        assertThat(before.get("right").get("value").asInt(), equalTo(20));
+        assertThat(before.get("right").get("right").get("value").asInt(), equalTo(30));
+
+        // ~when
+        final Node root = AvlTreeUtil.getInstance().rotateLeft(nodes);
+
+        // ~then
+        final JsonNode after = AvlTreeUtil.getInstance().toJson(root);
+        assertThat(after.get("value").asInt(), equalTo(20));
+        assertThat(after.get("left").get("value").asInt(), equalTo(10));
+        assertThat(after.get("right").get("value").asInt(), equalTo(30));
+    }
+
+    @Test
+    public void rotateRightShallMakeParentTheRoot() {
+        final Node grandParent = new Node(30);
+        final Node parent = new Node(20);
+        final Node child = new Node(10);
+        parent.setLeft(child);
+        grandParent.setLeft(parent);
+
+        final Stack<Node> nodes = new Stack<>();
+        nodes.push(child);
+        nodes.push(parent);
+        nodes.push(grandParent);
+
+        // ~given
+        final JsonNode before = AvlTreeUtil.getInstance().toJson(nodes.lastElement());
+        assertThat(before.get("value").asInt(), equalTo(30));
+        assertThat(before.get("left").get("value").asInt(), equalTo(20));
+        assertThat(before.get("left").get("left").get("value").asInt(), equalTo(10));
+
+        // ~when
+        final Node root = AvlTreeUtil.getInstance().rotateRight(nodes);
+
+        // ~then
+        final JsonNode after = AvlTreeUtil.getInstance().toJson(root);
+        assertThat(after.get("value").asInt(), equalTo(20));
+        assertThat(after.get("left").get("value").asInt(), equalTo(10));
+        assertThat(after.get("right").get("value").asInt(), equalTo(30));
+    }
+
 }

@@ -89,20 +89,7 @@ public class AvlTreeTest {
         assertThat(isEmpty, equalTo(false));
     }
 
-    @Test
-    public void anInsertOnAnEmptyTreeShallReturnHeightOfZero() {
-        final AvlTree tree = new AvlTree();
-
-        // ~given
-        final Integer number = 10;
-
-        // ~when
-        final Integer height = tree.insert(number);
-
-        // ~then
-        assertThat(height, equalTo(0));
-    }
-
+/*
     @Test
     public void anInsertOnANodeWithAHeightOfZeroShallReturnHeightOfOne() {
         final AvlTree tree = new AvlTree();
@@ -228,5 +215,5 @@ public class AvlTreeTest {
         assertThat(root.get("right").get("value").asInt(), equalTo(50));
         assertThat(root.get("right").get("right").get("value").asInt(), equalTo(60));
     }
-
+*/
 }
