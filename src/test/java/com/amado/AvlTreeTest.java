@@ -60,4 +60,75 @@ public class AvlTreeTest {
         // ~then
         assertThat(root, notNullValue());
     }
+
+    @Test
+    public void isEmptyShallReturnTrueWhenRootIsNull() {
+        // ~given
+        final AvlTree tree = new AvlTree();
+
+        // ~when
+        final Boolean isEmpty = tree.isEmpty();
+
+        // ~then
+        assertThat(isEmpty, equalTo(true));
+    }
+
+    @Test
+    public void isEmptyShallReturnFalseWhenRootIsNotNull() {
+        final AvlTree tree = new AvlTree();
+        final Integer number = 10;
+
+        // ~given
+        tree.insert(number);
+
+        // ~when
+        final Boolean isEmpty = tree.isEmpty();
+
+        // ~then
+        assertThat(isEmpty, equalTo(false));
+    }
+
+    @Test
+    public void anInsertOnAnEmptyTreeShallReturnHeightOfZero() {
+        final AvlTree tree = new AvlTree();
+
+        // ~given
+        final Integer number = 10;
+
+        // ~when
+        final Integer height = tree.insert(number);
+
+        // ~then
+        assertThat(height, equalTo(0));
+    }
+
+    @Test
+    public void anInsertOnANodeWithAHeightOfZeroShallReturnHeightOfOne() {
+        final AvlTree tree = new AvlTree();
+
+        // ~given
+        tree.insert(10);
+
+        // ~when
+        final Integer height = tree.insert(20);
+
+        // ~then
+        assertThat(height, equalTo(1));
+    }
+
+    @Test
+    public void anInsertOnANodeWithAHeightOfOneShallReturnHeightOfTwo() {
+        final AvlTree tree = new AvlTree();
+
+        // ~given
+        tree.insert(10);
+        tree.insert(20);
+
+        // ~when
+        final Integer height = tree.insert(30);
+
+        // ~then
+        assertThat(height, equalTo(2));
+    }
+
 }

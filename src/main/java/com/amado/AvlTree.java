@@ -13,6 +13,10 @@ public class AvlTree {
         return root;
     }
 
+    public Boolean isEmpty() {
+        return null == getRoot();
+    }
+
     public Integer insert(final Integer number) {
         Validate.notNull(number, "number cannot be null.");
 
@@ -36,19 +40,38 @@ public class AvlTree {
             final Node left = parent.getLeft();
             if (null == left) {
                 parent.setLeft(child);
-                return 1;
+                parent.setLeftHeight(1);
+                return parent.getLeftHeight();
             }
 
-            return parent.getLeftHeight() + insert(parent.getLeft(), child);
+            final Integer height = insert(left, child);
+            parent.setLeftHeight(parent.getLeftHeight() + height);
+
+            if (!isBalanced(parent)) {
+                System.out.println("L Rotation Needed!");
+            }
+
+            return parent.getLeftHeight();
         }
 
         final Node right = parent.getRight();
         if (null == right) {
             parent.setRight(child);
-            return 1;
+            parent.setRightHeight(1);
+            return parent.getRightHeight();
         }
 
-        return parent.getRightHeight() + insert(parent.getRight(), child);
+        final Integer height = insert(right, child);
+        parent.setRightHeight(parent.getRightHeight() + height);
+
+        if (!isBalanced(parent)) {
+            System.out.println("R Rotation Needed!");
+        }
+
+        return parent.getRightHeight();
     }
 
+    private Boolean isBalanced(final Node node) {
+        return Math.abs(node.getLeftHeight() - node.getRightHeight()) <= 1;
+    }
 }
