@@ -1,5 +1,6 @@
 package com.amado;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.Validate;
 
 public class AvlTree {
@@ -13,6 +14,7 @@ public class AvlTree {
         return root;
     }
 
+    @JsonIgnore
     public Boolean isEmpty() {
         return null == getRoot();
     }
@@ -37,25 +39,46 @@ public class AvlTree {
         }
 
         if (childValue < parentValue) {
-            final Node left = parent.getLeft();
-            if (null == left) {
-                parent.setLeft(child);
-                parent.setLeftHeight(1);
-                return parent.getLeftHeight();
-            }
+            return insertLeft(parent, child);
+        }
 
-            final Integer height = insert(left, child);
-            parent.setLeftHeight(parent.getLeftHeight() + height);
+        return insertRight(parent, child);
+    }
 
-            if (!isBalanced(parent)) {
-                System.out.println("L Rotation Needed!");
-            }
-
+    private Integer insertLeft(final Node parent, final Node child) {
+        final Node left = parent.getLeft();
+        if (null == left) {
+            child.setParent(parent);
+            parent.setLeft(child);
+            parent.setLeftHeight(1);
             return parent.getLeftHeight();
         }
 
+        final Integer height = insert(left, child);
+        parent.setLeftHeight(parent.getLeftHeight() + height);
+
+        if (!isBalanced(parent)) {
+            final Node grandParent = parent.getParent();
+            final Node parentChild = parent.getLeft();
+            parentChild.setParent(grandParent);
+            if (null == grandParent) {
+                root = parent.getLeft();
+            }
+
+            parentChild.setRight(parent);
+            parentChild.setRightHeight(1);
+            parent.setParent(parentChild);
+            parent.setLeft(null);
+            parent.setLeftHeight(0);
+        }
+
+        return parent.getLeftHeight();
+    }
+
+    private Integer insertRight(final Node parent, final Node child) {
         final Node right = parent.getRight();
         if (null == right) {
+            child.setParent(parent);
             parent.setRight(child);
             parent.setRightHeight(1);
             return parent.getRightHeight();
@@ -65,11 +88,23 @@ public class AvlTree {
         parent.setRightHeight(parent.getRightHeight() + height);
 
         if (!isBalanced(parent)) {
-            System.out.println("R Rotation Needed!");
+            final Node grandParent = parent.getParent();
+            final Node parentChild = parent.getRight();
+            parentChild.setParent(grandParent);
+            if (null == grandParent) {
+                root = parent.getRight();
+            }
+
+            parentChild.setLeft(parent);
+            parentChild.setLeftHeight(1);
+            parent.setParent(parentChild);
+            parent.setRight(null);
+            parent.setRightHeight(0);
         }
 
         return parent.getRightHeight();
     }
+
 
     private Boolean isBalanced(final Node node) {
         return Math.abs(node.getLeftHeight() - node.getRightHeight()) <= 1;

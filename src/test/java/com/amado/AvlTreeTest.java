@@ -1,10 +1,12 @@
 package com.amado;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class AvlTreeTest {
@@ -117,7 +119,7 @@ public class AvlTreeTest {
     }
 
     @Test
-    public void anInsertOnANodeWithAHeightOfOneShallReturnHeightOfTwo() {
+    public void aRightRightImbalancedTreeShallGetBalanced() {
         final AvlTree tree = new AvlTree();
 
         // ~given
@@ -128,7 +130,35 @@ public class AvlTreeTest {
         final Integer height = tree.insert(30);
 
         // ~then
-        assertThat(height, equalTo(2));
+        assertThat(height, equalTo(0));
+
+
+        final JsonNode json = AvlTreeUtil.getInstance().toJson(tree);
+        final JsonNode root = json.get("root");
+        assertThat(root.get("value").asInt(), equalTo(20));
+        assertThat(root.get("left").get("value").asInt(), equalTo(10));
+        assertThat(root.get("right").get("value").asInt(), equalTo(30));
+    }
+
+    @Test
+    public void aLeftLeftImbalancedTreeShallGetBalanced() {
+        final AvlTree tree = new AvlTree();
+
+        // ~given
+        tree.insert(30);
+        tree.insert(20);
+
+        // ~when
+        final Integer height = tree.insert(10);
+
+        // ~then
+        assertThat(height, equalTo(0));
+
+        final JsonNode json = AvlTreeUtil.getInstance().toJson(tree);
+        final JsonNode root = json.get("root");
+        assertThat(root.get("value").asInt(), equalTo(20));
+        assertThat(root.get("left").get("value").asInt(), equalTo(10));
+        assertThat(root.get("right").get("value").asInt(), equalTo(30));
     }
 
 }

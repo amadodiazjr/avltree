@@ -1,5 +1,6 @@
 package com.amado;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.Validate;
@@ -7,11 +8,13 @@ import org.apache.commons.lang3.Validate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Node {
     @JsonProperty("value") private final Integer value;
-    @JsonProperty("parent") private Node parent;
+
     @JsonProperty("left") private Node left;
     @JsonProperty("right") private Node right;
     @JsonProperty("leftHeight") private Integer leftHeight;
     @JsonProperty("rightHeight") private Integer rightHeight;
+
+    @JsonIgnore private Node parent;
 
     public Node(final Integer value) {
         Validate.notNull(value, "value cannot be null.");
