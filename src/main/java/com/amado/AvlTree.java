@@ -58,14 +58,26 @@ public class AvlTree {
         parent.setLeftHeight(parent.getLeftHeight() + height);
 
         if (!isBalanced(parent)) {
-            final Node grandParent = parent.getParent();
-            final Node parentChild = parent.getLeft();
-            parentChild.setParent(grandParent);
-            if (null == grandParent) {
-                root = parent.getLeft();
+            final Node grandParent = parent.getParent();  // null
+            Node parentChild = parent.getLeft();    // 20
+
+            if (null != parentChild.getRight()) {
+                final Node parentChildRight = parentChild.getRight();
+                parentChildRight.setParent(parentChild.getParent());
+                parentChildRight.setLeft(parentChild);
+                parentChildRight.setLeftHeight(1);
+                parentChild.setRight(null);
+                parentChild.setRightHeight(0);
+                parentChild.setParent(parentChildRight);
+                parentChild = parentChildRight;
             }
 
-            parentChild.setRight(parent);
+            parentChild.setParent(grandParent);           // 20 > null
+            if (null == grandParent) {
+                root = parentChild;
+            }
+
+            parentChild.setRight(parent);                 //
             parentChild.setRightHeight(1);
             parent.setParent(parentChild);
             parent.setLeft(null);
@@ -89,10 +101,22 @@ public class AvlTree {
 
         if (!isBalanced(parent)) {
             final Node grandParent = parent.getParent();
-            final Node parentChild = parent.getRight();
+            Node parentChild = parent.getRight();
+
+            if (null != parentChild.getLeft()) {
+                final Node parentChildLeft = parentChild.getLeft();
+                parentChildLeft.setParent(parentChild.getParent());
+                parentChildLeft.setRight(parentChild);
+                parentChildLeft.setRightHeight(1);
+                parentChild.setLeft(null);
+                parentChild.setLeftHeight(0);
+                parentChild.setParent(parentChildLeft);
+                parentChild = parentChildLeft;
+            }
+
             parentChild.setParent(grandParent);
             if (null == grandParent) {
-                root = parent.getRight();
+                root = parentChild;
             }
 
             parentChild.setLeft(parent);
