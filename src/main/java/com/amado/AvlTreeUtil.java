@@ -113,4 +113,25 @@ public class AvlTreeUtil {
         return rotateLeft(rotatedNodes);
     }
 
+    public Node rotateLeftThenRight(final Stack<Node> nodes) {
+        Validate.isTrue(nodes.size() == 3, "incorrect number of nodes found.");
+
+        final Node grandParent = nodes.pop();
+        final Node parent = nodes.pop();
+        final Node child = nodes.pop();
+
+        grandParent.setLeft(child);
+        child.setLeft(parent);
+        child.setParent(grandParent);
+        parent.setParent(child);
+        parent.setRight(null);
+
+        final Stack<Node> rotatedNodes = new Stack<>();
+        rotatedNodes.push(parent);
+        rotatedNodes.push(child);
+        rotatedNodes.push(grandParent);
+
+        return rotateRight(rotatedNodes);
+    }
+
 }

@@ -129,14 +129,14 @@ public class AvlTreeUtilTest {
         assertThat(after.get("left").get("value").asInt(), equalTo(30));
         assertThat(after.get("right").get("value").asInt(), equalTo(50));
     }
-/*
+
     @Test
     public void rotateLeftThenRightShallMakeChildTheRoot() {
-        final Node grandParent = new Node(30);
-        final Node parent = new Node(50);
+        final Node grandParent = new Node(50);
+        final Node parent = new Node(30);
         final Node child = new Node(40);
-        parent.setLeft(child);
-        grandParent.setRight(parent);
+        parent.setRight(child);
+        grandParent.setLeft(parent);
 
         final Stack<Node> nodes = new Stack<>();
         nodes.push(child);
@@ -145,12 +145,12 @@ public class AvlTreeUtilTest {
 
         // ~given
         final JsonNode before = AvlTreeUtil.getInstance().toJson(nodes.lastElement());
-        assertThat(before.get("value").asInt(), equalTo(30));
-        assertThat(before.get("right").get("value").asInt(), equalTo(50));
-        assertThat(before.get("right").get("left").get("value").asInt(), equalTo(40));
+        assertThat(before.get("value").asInt(), equalTo(50));
+        assertThat(before.get("left").get("value").asInt(), equalTo(30));
+        assertThat(before.get("left").get("right").get("value").asInt(), equalTo(40));
 
         // ~when
-        final Node root = AvlTreeUtil.getInstance().rotateRightThenLeft(nodes);
+        final Node root = AvlTreeUtil.getInstance().rotateLeftThenRight(nodes);
 
         // ~then
         final JsonNode after = AvlTreeUtil.getInstance().toJson(root);
@@ -158,5 +158,5 @@ public class AvlTreeUtilTest {
         assertThat(after.get("left").get("value").asInt(), equalTo(30));
         assertThat(after.get("right").get("value").asInt(), equalTo(50));
     }
-*/
+
 }
