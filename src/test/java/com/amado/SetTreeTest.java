@@ -29,15 +29,22 @@ public class SetTreeTest {
         final SetTree tree = new SetTree();
 
         // ~given
-        final Set<Integer> set = new HashSet<>();
-        set.add(1);
+        final Set<Integer> setOne = new HashSet<>();
+        setOne.add(1);
 
         // ~when
-        final SetNode node = tree.insert(set);
+        SetNode node = tree.insert(setOne);
 
         // ~then
         assertThat(node, notNullValue());
-        final JsonNode json = AvlTreeUtil.getInstance().toJson(node);
+        JsonNode json = AvlTreeUtil.getInstance().toJson(node);
+        assertThat(json, notNullValue());
+
+        final Set<Integer> setTwo = new HashSet<>();
+        setTwo.add(2);
+
+        node = tree.insert(setTwo);
+        json = AvlTreeUtil.getInstance().toJson(node);
         assertThat(json, notNullValue());
     }
 
