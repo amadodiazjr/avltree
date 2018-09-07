@@ -32,6 +32,21 @@ public class AvlTreeUtil {
         return node;
     }
 
+    public JsonNode toJson(final SetNode setNode) {
+        Validate.notNull(setNode, "subTree cannot be null.");
+
+        JsonNode node = null;
+        try {
+            final String jsonString = new ObjectMapper().writeValueAsString(setNode);
+            node = toJsonNode(jsonString);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        Validate.notNull(node, "json not created.");
+
+        return node;
+    }
+
     public JsonNode toJson(final Node subTree) {
         Validate.notNull(subTree, "subTree cannot be null.");
 

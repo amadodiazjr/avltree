@@ -26,16 +26,16 @@ public class AvlTree {
             root = new Node(number);
         }
 
-        final Node node = insert(root, number);
+        insert(root, number);
         //balanceTree(node);
     }
 
-    private Node insert(final Node current, final Integer number) {
+    private Integer insert(final Node current, final Integer number) {
         final Integer currentValue = current.getValue();
 
         // Already exists, don't insert
         if (number == currentValue) {
-            return current;
+            return Math.abs(current.getLeftHeight() - current.getRightHeight());
         }
 
         // Traverse Left
@@ -46,10 +46,13 @@ public class AvlTree {
                 node.setParent(current);
                 current.setLeft(node);
 
-                return node;
+                return 1;
             }
 
-            return insert(left, number);
+            final Integer leftHeight = insert(left, number+1);
+            current.setLeftHeight(leftHeight);
+
+            
         }
 
         // Traverse Right
@@ -59,10 +62,10 @@ public class AvlTree {
             node.setParent(current);
             current.setRight(node);
 
-            return node;
+            return 1;
         }
 
-        return insert(current.getRight(), number);
+        return insert(current.getRight(), number+1);
     }
 
     private Node balanceTree(final Node node) {
