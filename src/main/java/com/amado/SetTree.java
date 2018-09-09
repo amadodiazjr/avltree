@@ -1,6 +1,5 @@
 package com.amado;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,21 +19,19 @@ public class SetTree {
             return new SetNode(value);
         }
 
-        if (root.equals(new SetNode(value))) {
+        final Set<Integer> rootValue = root.getValue();
+        if (!rootValue.containsAll(value)) {
+            final Set<Integer> newValue = new HashSet<>();
+            newValue.addAll(rootValue);
+            newValue.addAll(value);
+
+            root.setLeft(insert(root.getLeft(), newValue));
+            root.setRight(insert(root.getRight(), rootValue));
             return root;
         }
 
-        if (root.getValue().isEmpty()) {
-            root.setLeft(insert(root.getLeft(), value));
-            root.setRight(insert(root.getRight(), root.getValue()));
-        } else {
-            final Set<Integer> rootValue = root.getValue();
-            Set<Integer> newSet = new HashSet<>();
-            newSet.addAll(value);
-            newSet.addAll(rootValue);
-            root.setLeft(insert(root.getLeft(), newSet));
-            root.setRight(insert(root.getRight(), rootValue));
-        }
+        root.setLeft(insert(root.getLeft(), value));
+        root.setRight(insert(root.getRight(), value));
 
         return root;
     }
