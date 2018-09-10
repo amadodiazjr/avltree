@@ -100,4 +100,42 @@ public class SetNodeTest {
         // ~then
         assertThat(isEqual, equalTo(false));
     }
+
+    @Test
+    public void testWTF() {
+        final Integer[] numbers = {1,2,3};
+        all_subsets(numbers);
+    }
+
+    private void all_subsets(final Integer[] numbers) {
+        final Integer[] subset = new Integer[numbers.length];
+        helper(numbers, subset, 0);
+    }
+
+    private void helper(final Integer[] numbers, final Integer[] subset, Integer index) {
+        if (index == numbers.length) {
+            print_set(subset);
+        } else {
+            subset[index] = null;
+            helper(numbers, subset, index+1);
+            subset[index] = numbers[index];
+            helper(numbers, subset, index+1);
+        }
+    }
+
+    private void print_set(final Integer[] set) {
+        String result = new String();
+        for (int i=0; i<set.length; i++) {
+            final Integer number = set[i];
+            if (number != null) {
+                if (!result.isEmpty()) {
+                    result = result + ",";
+                }
+
+                result = result + number;
+            }
+        }
+
+        System.out.println("{" + result + "}");
+    }
 }

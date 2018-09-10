@@ -20,7 +20,7 @@ public class SetTree {
         }
 
         final Set<Integer> rootValue = root.getValue();
-        if (!rootValue.containsAll(value)) {
+        if (rootValue.contains(value)) {
             final Set<Integer> newValue = new HashSet<>();
             newValue.addAll(rootValue);
             newValue.addAll(value);
